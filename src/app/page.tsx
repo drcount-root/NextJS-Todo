@@ -10,6 +10,13 @@ const deleteAllTodos = function () {
   return prisma.todo.deleteMany();
 };
 
+const toggleTodo = async function (id: string, complete: boolean) {
+  "use server";
+
+  await prisma.todo.update({ where: { id }, data: { complete } });
+  console.log(id, complete);
+};
+
 export default async function Home() {
   const todos = await getTodos();
 
@@ -27,7 +34,7 @@ export default async function Home() {
       <ul className="pl-4">
         {todos.map((todo) => (
           // <li key={todo.id}>{todo.title}</li>
-          <TodoItem key={todo.id} {...todo}/>
+          <TodoItem key={todo.id} {...todo} toggleTodo={toggleTodo} />
         ))}
       </ul>
     </>
